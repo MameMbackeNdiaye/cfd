@@ -7,8 +7,12 @@ use Illuminate\Database\Eloquent\Model;
 
 class Role extends Model
 {
-    protected $fillable = array('nom');
     use HasFactory;
+    protected $fillable = array('nom');
+    
+    protected $casts =[
+        'created_at' => 'datetime:d-M-Y'
+    ];
 
 
     public function users(){

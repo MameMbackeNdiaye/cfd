@@ -63,11 +63,20 @@ Route::group([
 // Route a proteger
 });
 
-/*
+
 Route::prefix('admin')->middleware(['auth:sanctum','verified'])->name('admin.')->group
 (function(){
     Route::get('dashboard',[App\Http\Controllers\Admins\AdminDashboardController::class,'index'])->name('dashboard');
+
+    Route::prefix('roles')->name('roles.')->group(function(){
+        Route::get('/',[App\Http\Controllers\Admins\RoleController::class,'index'])->name('index');
+        Route::get('/create',[App\Http\Controllers\Admins\RoleController::class,'create'])->name('create');
+        Route::post('/store',[App\Http\Controllers\Admins\RoleController::class,'store'])->name('store');
+        Route::patch('/edit/{id}',[App\Http\Controllers\Admins\RoleController::class,'update'])->name('update');
+        //Route::delete('/delete/{id}',[App\Http\Controllers\Admins\RoleController::class, 'delete'])->name('delete');
+    });
+
 });
-*/
+
 
 

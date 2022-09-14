@@ -4,8 +4,9 @@ namespace App\Http\Controllers\Admins;
 
 use App\Http\Controllers\Controller;
 use App\Models\Role;
-use App\Models\Roles;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
+use Inertia\Inertia;
 
 class RoleController extends Controller
 {
@@ -16,7 +17,9 @@ class RoleController extends Controller
      */
     public function index()
     {
-        //
+        return Inertia::render('Admin/Roles/Index',[
+            'roles' => Role::all()
+        ]);
     }
 
     /**
@@ -26,7 +29,8 @@ class RoleController extends Controller
      */
     public function create()
     {
-        //
+        return Inertia::render('Admin/Roles/Create');
+
     }
 
     /**
@@ -37,7 +41,14 @@ class RoleController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        Validator::make($request->all(), [
+            'nom' => ['required'],
+        ])->validate();
+  
+        Role::create($request->all());
+  
+        return redirect()->back()
+                    ->with('message', 'Role Created Successfully.');   
     }
 
     /**
@@ -71,7 +82,17 @@ class RoleController extends Controller
      */
     public function update(Request $request, Role $roles)
     {
-        //
+        Validator::make($request->all(), [
+            'nom' => ['required'],
+        ])->validate();
+  
+        if ($request->has('id')) {
+            //Role::find($request->input('id'))->update($request->all());
+         $roles->update($request->only(['nom']));   
+            
+            return redirect()->back()
+                    ->with('message', 'Role Updated Successfully.');
+        }
     }
 
     /**

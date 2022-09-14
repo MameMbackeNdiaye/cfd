@@ -5,7 +5,7 @@ import { Inertia } from '@inertiajs/inertia';
 </script>
 
 <template>
-        <footer class="w-full py-16 mt-12 bg-gray-100">
+        <footer class="w-full py-16 bg-gray-100">
             <div class="md:px-12 lg:px-28">
                 <div class="container m-auto space-y-6 text-gray-600">
                     <img src="https://static.vecteezy.com/system/resources/previews/001/188/239/non_2x/heart-logo-png.png" alt="logo site" class="w-20 m-auto" />
