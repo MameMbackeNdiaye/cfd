@@ -70,9 +70,15 @@ Route::prefix('admin')->middleware(['auth:sanctum','verified'])->name('admin.')-
 
     Route::prefix('roles')->name('roles.')->group(function(){
         Route::get('/',[App\Http\Controllers\Admins\RoleController::class,'index'])->name('index');
-        Route::get('/create',[App\Http\Controllers\Admins\RoleController::class,'create'])->name('create');
         Route::post('/store',[App\Http\Controllers\Admins\RoleController::class,'store'])->name('store');
-        Route::patch('/edit/{id}',[App\Http\Controllers\Admins\RoleController::class,'update'])->name('update');
+        Route::PATCH('/edit/{id}',[App\Http\Controllers\Admins\RoleController::class,'update'])->name('update');
+        //Route::delete('/delete/{id}',[App\Http\Controllers\Admins\RoleController::class, 'delete'])->name('delete');
+    });
+    Route::prefix('gestionnaires')->name('gestionnaires.')->group(function(){
+        Route::get('/',[App\Http\Controllers\Admins\GestionnaireController::class,'index'])->name('index');
+        Route::get('/create',[App\Http\Controllers\Admins\GestionnaireController::class,'create'])->name('create');
+        Route::post('/store',[App\Http\Controllers\Admins\GestionnaireController::class,'store'])->name('store');
+        Route::put('/edit/{id}',[App\Http\Controllers\Admins\GestionnaireController::class,'update'])->name('update');
         //Route::delete('/delete/{id}',[App\Http\Controllers\Admins\RoleController::class, 'delete'])->name('delete');
     });
 

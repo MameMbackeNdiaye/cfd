@@ -11,6 +11,10 @@ use Illuminate\Database\Eloquent\Model;
 class Projet extends Model
 {
     protected $fillable = array('codeProjet','users_id','themes_id','owners_id','commissions_id','cagnottes_id','contrats_id','articles_id','nom','description');
+    protected $casts =[
+        'created_at' => 'datetime:d-M-Y'
+    ];
+
     use HasFactory;
 
     public function theme()

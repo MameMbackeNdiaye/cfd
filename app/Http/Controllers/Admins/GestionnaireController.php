@@ -3,24 +3,27 @@
 namespace App\Http\Controllers\Admins;
 
 use App\Http\Controllers\Controller;
-use App\Models\Role;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
+use Laravel\Fortify\Rules\Password;
 use Illuminate\Support\Facades\Validator;
 use Inertia\Inertia;
+use Laravel\Fortify\Rules\Password as RulesPassword;
+use Laravel\Jetstream\Jetstream;
 
-class RoleController extends Controller
+class GestionnaireController extends Controller
 {
-    /**
+        /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
     public function index()
     {
-        return Inertia::render('Admin/Roles/Index',[
-            'roles' => Role::all(),
-            'users'=> User::all()
+        $usersList = User::all();
+        return Inertia::render('Admin/Gestionnaires/Index',[
+            'users'=> $usersList
         ]);
     }
 
@@ -31,7 +34,7 @@ class RoleController extends Controller
      */
     public function create()
     {
-        return Inertia::render('Admin/Roles/Create');
+        return Inertia::render('Admin/Gestionnaires/Create');
 
     }
 
@@ -44,13 +47,22 @@ class RoleController extends Controller
     public function store(Request $request)
     {
         Validator::make($request->all(), [
-            'nom' => ['required'],
+            'name' => ['required', 'string', 'max:255'],
+            'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
+            'password' => [ 'required', 'string', new Password, 'confirmed'],
+            'terms' => Jetstream::hasTermsAndPrivacyPolicyFeature() ? ['accepted', 'required'] : '',
         ])->validate();
   
-        Role::create($request->all());
+        return User::create([
+            'name' => $request['name'],
+            'email' => $request['email'],
+            'is_admin' => $request[value('is_admin', 1)],
+            'password' => Hash::make($request['password'])
+        ]);
+  
   
         return redirect()->back()
-                    ->with('message', 'Role Created Successfully.');   
+                    ->with('message', 'User Created Successfully.');   
     }
 
     /**
@@ -59,7 +71,7 @@ class RoleController extends Controller
      * @param  \App\Models\Roles  $roles
      * @return \Illuminate\Http\Response
      */
-    public function show(Role $roles)
+    public function show(User $users)
     {
         //
     }
@@ -70,7 +82,7 @@ class RoleController extends Controller
      * @param  \App\Models\Roles  $roles
      * @return \Illuminate\Http\Response
      */
-    public function edit(Role $roles)
+    public function edit(User $users)
     {
         //
     }
@@ -82,23 +94,20 @@ class RoleController extends Controller
      * @param  \App\Models\Roles  $roles
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Role $roles)
+    public function update(Request $request, User $users)
     {
-        
         Validator::make($request->all(), [
             'nom' => ['required'],
         ])->validate();
   
         if ($request->has('id')) {
             //Role::find($request->input('id'))->update($request->all());
-         $roles->update($request->only(['nom']));   
-          
+         $users->update($request->only(['nom']));   
+            
             return redirect()->back()
-                    ->with('message', 'Role Updated Successfully.');
-        
+                    ->with('message', 'User Updated Successfully.');
+        }
     }
-}
-    
 
     /**
      * Remove the specified resource from storage.
@@ -106,8 +115,9 @@ class RoleController extends Controller
      * @param  \App\Models\Roles  $roles
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Role $roles)
+    public function destroy(User $roles)
     {
         //
     }
+
 }
